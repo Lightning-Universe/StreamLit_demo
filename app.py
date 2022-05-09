@@ -19,14 +19,18 @@ def render_fn(state: AppState):
     # By accessing them or overriding them, this would be communicated to the flow.
     import streamlit as st
 
-    should_print = st.button("Click to increment the counter.")
+    if state.should_print:
+        clicked = st.button("Click to stop the incrementing the counter.")
+    else:
+        clicked = st.button("Click to start the incrementing the counter.")
 
-    msg = f"Currently incrementing counter. " if state.should_print else "Waiting for you to click the button. "
-    st.write(msg + f"Counter value is `{state.counter}/100`")
+    st.write(f"Status: `{'Running' if state.should_print else 'Stopped'}`")
+
+    st.write(f"The counter value is `{state.counter} / 100`")
 
     st.progress(state.counter)
 
-    if should_print:
+    if clicked:
         # Negate the `StreamlitUI` should_print value.
         state.should_print = not state.should_print
 
