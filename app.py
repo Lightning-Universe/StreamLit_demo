@@ -19,15 +19,16 @@ def render_fn(state: AppState):
     # By accessing them or overriding them, this would be communicated to the flow.
     import streamlit as st
 
-    should_print = st.button("Should print to the terminal ?")
+    should_print = st.button("Click to increment the counter.")
+
+    msg = f"Currently incrementing counter. " if state.should_print else "Waiting for you to click the button. "
+    st.write(msg + f"Counter value is `{state.counter}/100`")
+
+    st.progress(state.counter)
 
     if should_print:
         # Negate the `StreamlitUI` should_print value.
         state.should_print = not state.should_print
-
-    st.write(f"Currently printing {state.counter}." if state.should_print else "Currently waiting to print.")
-
-    st.progress(state.counter)
 
 
 class HelloWorld(LightningFlow):
