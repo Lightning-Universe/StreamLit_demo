@@ -8,34 +8,40 @@ class StreamlitUI(LightningFlow):
         super().__init__()
         self.message_to_print = "Hello World!"
         self.should_print = False
+        self.counter = 0
 
     def configure_layout(self):
         return StreamlitFrontend(render_fn=render_fn)
 
 
 def render_fn(state: AppState):
+    # The provided AppState contains StreamlitUI state e.f `message_to_print` and `should_print`.
+    # By accessing them or overriding them, this would be communicated to the flow.
     import streamlit as st
 
     should_print = st.button("Should print to the terminal ?")
 
     if should_print:
+        # Negate the `StreamlitUI` should_print value.
         state.should_print = not state.should_print
 
-    st.write("Currently printing." if state.should_print else "Currently waiting to print.")
+    st.write(f"Currently printing {state.counter}." if state.should_print else "Currently waiting to print.")
+
+    st.progress(state.counter)
 
 
 class HelloWorld(LightningFlow):
     def __init__(self):
         super().__init__()
-        self.counter = 0
         self.streamlit_ui = StreamlitUI()
 
     def run(self):
-        self.streamlit_ui.run()
+        # This becomes True when you click the UI button.
         if self.streamlit_ui.should_print:
-            print(f"{self.counter}: {self.streamlit_ui.message_to_print}")
-            self.counter += 1
-            self.streamlit_ui.should_print = False
+            print(f"{self.streamlit_ui.counter}: {self.streamlit_ui.message_to_print}")
+            self.streamlit_ui.counter += 1
+        if self.streamlit_ui.counter >= 100:
+            self.streamlit_ui.counter = 0
 
     def configure_layout(self):
         return [{"name": "StreamLitUI", "content": self.streamlit_ui}]
