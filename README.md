@@ -1,5 +1,8 @@
 # StreamLit Template Application in 2 steps
 
+[![Lightning](https://img.shields.io/badge/-Lightning-792ee5?logo=pytorchlightning&logoColor=white)](https://lightning.ai)
+[![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/Lightning-AI/metrics/blob/master/LICENSE)
+
 ## 1. Setup
 
 Create a virtual environment with python 3.8+ and run
